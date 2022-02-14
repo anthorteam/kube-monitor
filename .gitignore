@@ -1,3 +1,4 @@
 *.lock.json
 manifests/
 vendor/
+anthor-kube-monitor.zip

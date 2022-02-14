@@ -11,6 +11,9 @@ set -o pipefail
 PATH="$(pwd)/tmp/bin:${PATH}"
 
 # Make sure to start with a clean 'manifests' dir
+if [ -f anthor-kube-monitor.zip ]; then
+  rm anthor-kube-monitor.zip
+fi
 rm -rf manifests
 mkdir -p manifests/setup
 
@@ -21,3 +24,4 @@ jsonnet -J vendor -m manifests "${1-main.jsonnet}" | xargs -I{} sh -c 'cat {} | 
 find manifests -type f ! -name '*.yaml' -delete
 rm -f kustomization
 
+zip -r anthor-kube-monitor.zip manifests
