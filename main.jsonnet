@@ -9,6 +9,34 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
       namespaces: [],
     },
   },
+  ambassador: {
+    serviceMonitorAmbassador: {
+      apiVersion: 'monitoring.coreos.com/v1',
+      kind: 'ServiceMonitor',
+      metadata: {
+        name: 'ambassador-monitor',
+        namespace: 'ambassador',
+        labels: {
+          app: 'ambassador',
+        },
+      },
+      spec: {
+        namespaceSelector: {
+          matchNames: ['ambassador']
+        },
+        selector: {
+          matchLabels: {
+            service: 'ambassador-admin'
+          }
+        },
+        endpoints: [
+          {
+            port: 'ambassador-admin'
+          },
+        ],
+      },
+    },
+  },
   grafana+:: {
       deployment+: {
         spec+: {
@@ -69,4 +97,5 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
 { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
 { ['alertmanager-' + name]: kp.alertmanager[name] for name in std.objectFields(kp.alertmanager) } +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
-{ ['grafana-' + name]: kp.grafana[name] for name in std.objectFields(kp.grafana) }
+{ ['grafana-' + name]: kp.grafana[name] for name in std.objectFields(kp.grafana) } +
+{ ['ambassador-' + name]: kp.ambassador[name] for name in std.objectFields(kp.ambassador)}
