@@ -6,7 +6,30 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
       platform: 'gke',
       namespace: 'monitoring',
     },
-    prometheus+: {
+    prometheus+:: {
+      prometheus+: {
+        spec+: {
+          retention: '7d',
+
+          storage: {
+            volumeClaimTemplate: {
+              apiVersion: 'v1',
+              kind: 'PersistentVolumeClaim',
+              spec: {
+                accessModes: [
+                  'ReadWriteOnce'
+                ],
+                resources: {
+                  requests: {
+                   storage: '10Gi'
+                  }
+                },
+                storageClassName: 'premium-rwo',
+              },
+            },
+          },
+        },
+      },
       namespaces: [],
     },
   },
