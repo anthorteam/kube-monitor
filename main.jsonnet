@@ -91,8 +91,14 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
           name: 'grafana-storage',
         },
         spec: {
-          accessModes: ['ReadWriteOnce'],
-          resources: { requests: { storage: '8Gi' } },
+          accessModes: [
+            'ReadWriteOnce'
+          ],
+          resources: {
+            requests: {
+              storage: '8Gi'
+            }
+          },
           storageClassName: 'standard',
         },
       },
