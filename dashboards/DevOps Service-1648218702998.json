@@ -1,0 +1,390 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 28,
+  "iteration": 1648218698632,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "DeployCounter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.4",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "queryType": "randomWalk",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  now() as time,\n  to_char(deploy_creation_datetime, 'IYYY-IW') AS \"metric\",\n  COUNT(*) AS \"value\"\nFROM deploys\nWHERE deploy_env=$environment AND deploy_repository='$service'\nGROUP BY \"metric\"\nORDER BY \"metric\" DESC",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "${service} Deploys By Week",
+      "type": "bargauge"
+    },
+    {
+      "datasource": "DeployCounter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 20
+              },
+              {
+                "color": "orange",
+                "value": 40
+              },
+              {
+                "color": "red",
+                "value": 60
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.4",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "queryType": "randomWalk",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  now() as time,\n  to_char(deploy_creation_datetime, 'IYYY-IW') AS \"metric\",\n  (cast(COUNT(CASE WHEN deploy_caused_issue IS TRUE THEN 1 END) as float)*100.0)/cast(COUNT(*) as float) AS \"value\"\nFROM deploys\nWHERE deploy_env=$environment AND deploy_repository='$service'\nGROUP BY \"metric\"\nORDER BY \"metric\" DESC",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "${service} Percentage of Deploys With Issue",
+      "type": "bargauge"
+    }
+  ],
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "prod",
+          "value": "2"
+        },
+        "description": "",
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "environment",
+        "options": [
+          {
+            "selected": true,
+            "text": "dev",
+            "value": "0"
+          },
+          {
+            "selected": false,
+            "text": "homolog",
+            "value": "1"
+          },
+          {
+            "selected": false,
+            "text": "prod",
+            "value": "2"
+          }
+        ],
+        "query": "dev : 0, homolog : 1, prod : 2",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "deploy-counter",
+          "value": "deploy-counter"
+        },
+        "datasource": "DeployCounter",
+        "definition": "SELECT DISTINCT deploy_repository FROM deploys",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "service",
+        "options": [
+          {
+            "selected": false,
+            "text": "establishments",
+            "value": "establishments"
+          },
+          {
+            "selected": false,
+            "text": "anthor-points",
+            "value": "anthor-points"
+          },
+          {
+            "selected": false,
+            "text": "test",
+            "value": "test"
+          },
+          {
+            "selected": true,
+            "text": "consumer-activity-worker-payment",
+            "value": "consumer-activity-worker-payment"
+          },
+          {
+            "selected": false,
+            "text": "payment-gateway-service",
+            "value": "payment-gateway-service"
+          },
+          {
+            "selected": false,
+            "text": "common",
+            "value": "common"
+          },
+          {
+            "selected": false,
+            "text": "payment-gateway-webhooks-service",
+            "value": "payment-gateway-webhooks-service"
+          },
+          {
+            "selected": false,
+            "text": "activities",
+            "value": "activities"
+          },
+          {
+            "selected": false,
+            "text": "worker-payments-service",
+            "value": "worker-payments-service"
+          },
+          {
+            "selected": false,
+            "text": "deploy-counter",
+            "value": "deploy-counter"
+          },
+          {
+            "selected": false,
+            "text": "expired-products",
+            "value": "expired-products"
+          },
+          {
+            "selected": false,
+            "text": "companies",
+            "value": "companies"
+          },
+          {
+            "selected": false,
+            "text": "users",
+            "value": "users"
+          },
+          {
+            "selected": false,
+            "text": "activity-sync",
+            "value": "activity-sync"
+          },
+          {
+            "selected": false,
+            "text": "consumer-payment-deposit-callback",
+            "value": "consumer-payment-deposit-callback"
+          },
+          {
+            "selected": false,
+            "text": "consumer-pay-worker",
+            "value": "consumer-pay-worker"
+          },
+          {
+            "selected": false,
+            "text": "consumer-worker-subscription",
+            "value": "consumer-worker-subscription"
+          },
+          {
+            "selected": false,
+            "text": "consumer-worker-bonus",
+            "value": "consumer-worker-bonus"
+          },
+          {
+            "selected": false,
+            "text": "ratings",
+            "value": "ratings"
+          },
+          {
+            "selected": false,
+            "text": "consumer-deposit-payment",
+            "value": "consumer-deposit-payment"
+          },
+          {
+            "selected": false,
+            "text": "picking",
+            "value": "picking"
+          },
+          {
+            "selected": false,
+            "text": "worker-payment-statements-service",
+            "value": "worker-payment-statements-service"
+          },
+          {
+            "selected": false,
+            "text": "jobs",
+            "value": "jobs"
+          },
+          {
+            "selected": false,
+            "text": "consumer-success-or-failed-payment",
+            "value": "consumer-success-or-failed-payment"
+          },
+          {
+            "selected": false,
+            "text": "consumer-worker-integrations",
+            "value": "consumer-worker-integrations"
+          }
+        ],
+        "query": "SELECT DISTINCT deploy_repository FROM deploys",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "DevOps Service",
+  "uid": "Dc9wm5Enz",
+  "version": 5
+}
