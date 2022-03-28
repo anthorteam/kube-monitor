@@ -1,5 +1,6 @@
 local kp = (import 'kube-prometheus/main.libsonnet') +
 (import 'kube-prometheus/addons/custom-metrics.libsonnet') +
+(import 'seq.libsonnet') +
 (import 'kube-prometheus/addons/all-namespaces.libsonnet') + {
   values+:: {
     common+: {
@@ -188,4 +189,5 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) } +
 { ['ambassador-' + name]: kp.ambassador[name] for name in std.objectFields(kp.ambassador)} +
-{ ['grafana-access-' + name]: kp.externalGrafana[name] for name in std.objectFields(kp.externalGrafana)}
+{ ['grafana-access-' + name]: kp.externalGrafana[name] for name in std.objectFields(kp.externalGrafana)} +
+{ ['seq-' + name]: kp.seq[name] for name in std.objectFields(kp.seq)}
