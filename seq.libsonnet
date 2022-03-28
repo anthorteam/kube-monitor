@@ -6,7 +6,7 @@
       metadata: {
         labels: {
           app: 'seq',
-          release: 'dev'
+          release: 'prod'
         },
         name: 'seq-log',
         namespace: 'monitoring',
@@ -40,7 +40,7 @@
         selector: {
           matchLabels: {
             app: 'seq',
-            release: 'dev'
+            release: 'prod'
           }
         },
         strategy: {
