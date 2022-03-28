@@ -330,7 +330,7 @@
                 "value": [
                   {
                     "title": "drill down",
-                    "url": "https://grafana.api-dev.anthor.co/d/Dc9wm5Enz/devops-service?orgId=1&${environment:queryparam}&var-service=${__value.text}"
+                    "url": "https://grafana.anthor.co/d/Dc9wm5Enz/devops-service?orgId=1&${environment:queryparam}&var-service=${__value.text}"
                   }
                 ]
               },
@@ -455,7 +455,7 @@
                 "value": [
                   {
                     "title": "drill down",
-                    "url": "https://grafana.api-dev.anthor.co/d/Dc9wm5Enz/devops-service?orgId=1&${environment:queryparam}&var-service=${__value.text}"
+                    "url": "https://grafana.anthor.co/d/Dc9wm5Enz/devops-service?orgId=1&${environment:queryparam}&var-service=${__value.text}"
                   }
                 ]
               },

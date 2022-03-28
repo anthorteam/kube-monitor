@@ -179,6 +179,203 @@
       ],
       "title": "${service} Percentage of Deploys With Issue",
       "type": "bargauge"
+    },
+    {
+      "datasource": "DeployCounter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Deploy Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 200
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Caused Issue"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.5.4",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  deploy_creation_datetime AS \"Deploy Time\",\n  deploy_caused_issue AS \"Caused Issue\",\n  deploy_repository AS \"Service\",\n  deploy_responsible as \"Responsible\"\nFROM deploys\nWHERE deploy_env=$environment AND deploy_repository='$service'\nORDER BY \"deploy_creation_datetime\" DESC\nLIMIT 15",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "deploy_caused_issue"
+                ],
+                "type": "column"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "deploy_repository"
+                ],
+                "type": "column"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "deploy_env"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "deploys",
+          "timeColumn": "deploy_creation_datetime",
+          "where": []
+        }
+      ],
+      "title": "15 Last Deploys",
+      "type": "table"
+    },
+    {
+      "datasource": "DeployCounter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Deploy Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 200
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Caused Issue"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 8,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.4",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "queryType": "randomWalk",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  deploy_creation_datetime AS \"Deploy Time\",\n  deploy_repository AS \"Service\"\nFROM deploys\nWHERE deploy_env=$environment AND deploy_repository='$service' AND deploy_caused_issue IS TRUE\nORDER BY \"deploy_creation_datetime\" DESC\nLIMIT 15",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "15 Last Deploys With Issue",
+      "type": "table"
     }
   ],
   "schemaVersion": 27,
