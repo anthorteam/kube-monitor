@@ -3,13 +3,23 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
 (import 'seq.libsonnet') +
 (import 'kube-prometheus/addons/all-namespaces.libsonnet') + {
   values+:: {
-    common+: {
+    common+:: {
       namespace: 'monitoring',
     },
     prometheus+:{
       namespaces: [],
     },
     grafana+: {
+      env:[
+        {
+          name: 'GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS',
+          value: 'valiton-mongodbatlas-datasource',
+        },
+        {
+          name: 'GF_INSTALL_PLUGINS',
+          value: 'https://github.com/valiton/grafana-mongodb-atlas-datasource/releases/download/v3.0.1/valiton-mongodbatlas-datasource.zip;valiton-mongodbatlas-datasource',
+        },
+      ],
       dashboards+::{
           'dev-ops.json': (import 'dashboards/DevOps-1648218668076.json'),
           'dev-ops-service.json': (import 'dashboards/DevOps Service-1648218702998.json'),
@@ -29,11 +39,11 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
             auth_url: 'https://github.com/login/oauth/authorize',
             token_url: 'https://github.com/login/oauth/access_token',
             api_url: 'https://api.github.com/user',
-            allowed_organizations: 'anthorteam'
-          }
-        }
-      }
-    }
+            allowed_organizations: 'anthorteam',
+          },
+        },
+      },
+    },
   },
   prometheus+:: {
     prometheus+: {
@@ -77,12 +87,12 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
         },
         selector: {
           matchLabels: {
-            service: 'ambassador-admin'
-          }
+            service: 'ambassador-admin',
+          },
         },
         endpoints: [
           {
-            port: 'ambassador-admin'
+            port: 'ambassador-admin',
           },
         ],
       },
@@ -94,19 +104,19 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
       kind: 'Mapping',
       metadata: {
         name: 'grafana-mapping',
-        namespace: 'monitoring'
+        namespace: 'monitoring',
       },
       spec: {
         connect_timeout_ms: 30000,
         docs: {
-            ignored: true
+            ignored: true,
         },
         host: 'grafana.anthor.co',
         idle_timeout_ms: 30000,
         prefix: '/',
         service: 'grafana.monitoring:3000',
-        timeout_ms: 300000
-      }
+        timeout_ms: 300000,
+      },
     },
     grafanaHost: {
       apiVersion: 'getambassador.io/v2',
