@@ -48,7 +48,17 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
   prometheus+:: {
     prometheus+: {
       spec+: {
-        retention: '7d',
+        retention: '60d',
+        resources: {
+          requests: {
+            cpu: '250m',
+            memory: '2.5Gi'
+          },
+          limits: {
+            cpu: '1',
+            memory: '8Gi'
+          }
+        },
 
         storage: {
           volumeClaimTemplate: {
@@ -60,7 +70,7 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
               ],
               resources: {
                 requests: {
-                 storage: '10Gi'
+                 storage: '150Gi'
                 }
               },
               storageClassName: 'standard',
