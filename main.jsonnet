@@ -33,8 +33,8 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
           'auth.github': {
             enabled: true,
             allow_sign_up: true,
-            client_id: '...',
-            client_secret: '...',
+            client_id: std.extVar('GITHUB_CLIENT_ID'),
+            client_secret: std.extVar('GITHUB_CLIENT_SECRET'),
             scopes: 'user:email,read:org',
             auth_url: 'https://github.com/login/oauth/authorize',
             token_url: 'https://github.com/login/oauth/access_token',
@@ -155,6 +155,9 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
   grafana+:: {
     deployment+: {
       spec+: {
+        strategy+:{
+          type: "Recreate"
+        },
         template+: {
           spec+: {
             volumes: std.map(
