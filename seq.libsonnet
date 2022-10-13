@@ -70,7 +70,7 @@
                     value: '0.6'
                   }
                 ],
-                image: 'datalust/seq:2020',
+                image: 'gcr.io/anthor-dev/seq:latest',
                 imagePullPolicy: 'Always',
                 livenessProbe: {
                   failureThreshold: 3,

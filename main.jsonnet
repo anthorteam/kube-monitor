@@ -44,6 +44,9 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
         },
       },
     },
+    blackboxExporter+:{
+      configmapReloaderImage: "gcr.io/anthor-dev/configmap-reload:v0.5.0"
+    }
   },
   prometheus+:: {
     prometheus+: {
@@ -190,6 +193,13 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
       },
     },
   },
+  prometheusAdapter+:: {
+    deployment+: {
+      spec+: {
+        replicas: 1
+      }
+    }
+  }
 };
 
 { 'setup/0namespace-namespace': kp.kubePrometheus.namespace } +
