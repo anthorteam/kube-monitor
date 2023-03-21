@@ -113,7 +113,7 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
   },
   externalGrafana:{
     grafanaMapping: {
-      apiVersion: 'getambassador.io/v2',
+      apiVersion: 'getambassador.io/v3alpha1',
       kind: 'Mapping',
       metadata: {
         name: 'grafana-mapping',
@@ -124,7 +124,7 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
         docs: {
             ignored: true,
         },
-        host: 'grafana.anthor.co',
+        hostname: 'grafana.anthor.co',
         idle_timeout_ms: 30000,
         prefix: '/',
         service: 'grafana.monitoring:3000',
@@ -132,7 +132,7 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
       },
     },
     grafanaHost: {
-      apiVersion: 'getambassador.io/v2',
+      apiVersion: 'getambassador.io/v3alpha1',
       kind: 'Host',
       metadata: {
         name: 'grafana-host',
@@ -148,6 +148,11 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
         hostname: 'grafana.anthor.co',
         tlsSecret: {
           name: 'grafana-cert'
+        },
+        requestPolicy: {
+          insecure: {
+            action: 'Redirect'
+          }
         }
       }
     }
@@ -189,7 +194,7 @@ local kp = (import 'kube-prometheus/main.libsonnet') +
         ],
         resources: {
           requests: {
-            storage: '8Gi'
+            storage: '50Gi'
           }
         },
         storageClassName: 'standard',

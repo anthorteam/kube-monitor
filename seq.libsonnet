@@ -17,7 +17,7 @@
         ],
         resources: {
           requests: {
-            storage: '8Gi'
+            storage: '150Gi'
           }
         },
         storageClassName: 'standard',
@@ -156,6 +156,48 @@
           }
         }
       }
-    }
+    },
+    host+:{
+      apiVersion: 'getambassador.io/v3alpha1',
+      kind: 'Host',
+      metadata: {
+        labels: {
+            app: 'seq',
+            release: 'prod'
+        },
+        name: 'seq-host',
+        namespace: 'ambassador',
+      },
+      spec: {
+        acmeProvider: {
+          email: 'mateus.berardo@anthor.com',
+        },
+        hostname: 'seq.anthor.co',
+        requestPolicy: {
+          insecure: {
+            action: 'Redirect'
+          }
+        }
+      }
+    },
+    mapping+:{
+      apiVersion: 'getambassador.io/v3alpha1',
+      kind: 'Mapping',
+      metadata: {
+        namespace: 'monitoring',
+        name: 'seq-mapping'
+      },
+      spec: {
+        docs:{
+          ignored: true
+        },
+        connect_timeout_ms: 30000,
+        idle_timeout_ms: 30000,
+        timeout_ms: 300000,
+        prefix: '/',
+        hostname: 'seq.anthor.co',
+        serice: 'seq-log.monitoring:80'
+      }
+    },
   }
 }
